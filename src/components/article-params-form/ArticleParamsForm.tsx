@@ -32,14 +32,20 @@ export const ArticleParamsForm = ({ onApply }: ArticleParamsProps) => {
 		setIsOpen(!isOpen);
 	};
 
-	const [fontSelected, setfontSelect] = useState(fontFamilyOptions[0]);
-	const [fontSizeRadio, setFontSizeRadio] = useState(fontSizeOptions[0]);
-	const [fontColorSelected, setFontColorSelect] = useState(fontColors[0]);
+	const [fontSelected, setfontSelect] = useState(
+		defaultArticleState.fontFamilyOption
+	);
+	const [fontSizeRadio, setFontSizeRadio] = useState(
+		defaultArticleState.fontSizeOption
+	);
+	const [fontColorSelected, setFontColorSelect] = useState(
+		defaultArticleState.fontColor
+	);
 	const [backgroundColorSelected, setBackgroundColorSelectet] = useState(
-		backgroundColors[0]
+		defaultArticleState.backgroundColor
 	);
 	const [contentWidthSelected, setContentWidthSelected] = useState(
-		contentWidthArr[0]
+		defaultArticleState.contentWidth
 	);
 	const submit = () => {
 		onApply({
@@ -52,6 +58,11 @@ export const ArticleParamsForm = ({ onApply }: ArticleParamsProps) => {
 	};
 
 	const reset = () => {
+		setfontSelect(defaultArticleState.fontFamilyOption);
+		setFontSizeRadio(defaultArticleState.fontSizeOption);
+		setFontColorSelect(defaultArticleState.fontColor);
+		setBackgroundColorSelectet(defaultArticleState.backgroundColor);
+		setContentWidthSelected(defaultArticleState.contentWidth);
 		onApply({ ...defaultArticleState });
 	};
 
@@ -62,8 +73,6 @@ export const ArticleParamsForm = ({ onApply }: ArticleParamsProps) => {
 			if (!asideRef.current?.contains(e.target as HTMLElement)) {
 				setIsOpen(false);
 			}
-
-			return () => document.removeEventListener('mousedown', clickAway);
 		};
 		document.addEventListener('mousedown', clickAway);
 		return () => document.removeEventListener('mousedown', clickAway);
