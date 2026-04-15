@@ -1,6 +1,6 @@
 import { ArrowButton } from 'src/ui/arrow-button';
 import { Button } from 'src/ui/button';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, FormEvent } from 'react';
 import { Select } from 'src/ui/select';
 import styles from './ArticleParamsForm.module.scss';
 import {
@@ -27,9 +27,9 @@ type OnApplyParam = {
 	contentWidth: OptionType;
 };
 export const ArticleParamsForm = ({ onApply }: ArticleParamsProps) => {
-	const [isOpen, setIsOpen] = useState(false);
+	const [isMenuOpen, setIsMenuOpen] = useState(false);
 	const toogle = () => {
-		setIsOpen(!isOpen);
+		setIsMenuOpen(!isMenuOpen);
 	};
 
 	const [fontSelected, setfontSelect] = useState(
@@ -47,7 +47,8 @@ export const ArticleParamsForm = ({ onApply }: ArticleParamsProps) => {
 	const [contentWidthSelected, setContentWidthSelected] = useState(
 		defaultArticleState.contentWidth
 	);
-	const submit = () => {
+	const submit = (event: FormEvent<HTMLFormElement>) => {
+		event.preventDefault();
 		onApply({
 			fontFamilyOption: fontSelected,
 			fontSizeOption: fontSizeRadio,
@@ -69,21 +70,24 @@ export const ArticleParamsForm = ({ onApply }: ArticleParamsProps) => {
 	const asideRef = useRef<HTMLElement>(null);
 
 	useEffect(() => {
+		if (!isMenuOpen) return;
 		const clickAway = (e: MouseEvent) => {
 			if (!asideRef.current?.contains(e.target as HTMLElement)) {
-				setIsOpen(false);
+				setIsMenuOpen(false);
 			}
 		};
 		document.addEventListener('mousedown', clickAway);
 		return () => document.removeEventListener('mousedown', clickAway);
-	}, []);
+	}, [isMenuOpen]);
 	return (
 		<>
-			<ArrowButton isOpen={isOpen} onClick={toogle} />
+			<ArrowButton isOpen={isMenuOpen} onClick={toogle} />
 			<aside
 				ref={asideRef}
-				className={clsx(styles.container, { [styles.container_open]: isOpen })}>
-				<form className={styles.form}>
+				className={clsx(styles.container, {
+					[styles.container_open]: isMenuOpen,
+				})}>
+				<form className={styles.form} onSubmit={submit}>
 					<Text size={31} weight={800} uppercase={true} family='open-sans'>
 						Задайте параметры
 					</Text>
@@ -130,12 +134,7 @@ export const ArticleParamsForm = ({ onApply }: ArticleParamsProps) => {
 							type='clear'
 							onClick={reset}
 						/>
-						<Button
-							title='Применить'
-							htmlType='button'
-							type='apply'
-							onClick={submit}
-						/>
+						<Button title='Применить' htmlType='submit' type='apply' />
 					</div>
 				</form>
 			</aside>
