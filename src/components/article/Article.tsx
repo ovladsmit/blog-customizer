@@ -14,7 +14,7 @@ export const Article = () => {
 			</Text>
 			<div className={styles.titleDescription}>
 				<Text size={22} weight={800} uppercase align='center' dynamicLite>
-					Примитивист Фиштр расписывает новый бюджетный авиалайнер
+					Примитивист Фиштр расписывает новый бюджетный авиалайнерЫ
 				</Text>
 			</div>
 			<img className={styles.image} src={plane} alt='Картинка самолета' />
